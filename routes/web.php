@@ -6,6 +6,10 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LevelController;
 
+use App\Http\Controllers\PreAssessmentController;
+use App\Http\Controllers\LessonController;
+use App\Http\Controllers\PostAssessmentController;
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
@@ -18,6 +22,18 @@ Route::middleware('auth')->group(function () {
  Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/levels', [LevelController::class, 'index'])->name('levels.index');
 
+
+      Route::get('/levels', [LevelController::class, 'index'])->name('levels.index');
+
+    // Pre-assessment (for each level)
+     Route::post('/levels/{level}/pre-assessment', [PreAssessmentController::class, 'submit'])->name('levels.pre-assessment.submit');
+
+    // Change this route to handle POST requests as well
+    Route::post('/levels/{level}/lesson', [LessonController::class, 'submit'])->name('levels.lesson.submit');
+
+    // Post-assessment (for each level)
+    Route::get('/levels/{level}/post-assessment', [PostAssessmentController::class, 'show'])->name('levels.post-assessment');
+
 });
 Route::get('/progress', function () {
     return view('progress');
@@ -25,5 +41,7 @@ Route::get('/progress', function () {
 Route::get('/help', function () {
     return view('help');
 })->middleware(['auth'])->name('help');
-
+Route::get('/force-login', function () {
+    return view('auth.login');
+})->name('force.login');
 require __DIR__.'/auth.php';
