@@ -1,9 +1,3 @@
-
-@extends('layouts.app') {{-- or layouts.main or whatever yours is --}}
-
-@section('content')
-
-
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
         <a class="navbar-brand" href="#">
@@ -26,7 +20,6 @@
                 </li>
 
                 @guest
-                    <!-- Show if not logged in -->
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">Login</a>
                     </li>
@@ -34,7 +27,6 @@
                         <a class="btn btn-gradient text-white" href="{{ route('register') }}">Get Started</a>
                     </li>
                 @else
-                    <!-- Show if logged in -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user-circle fs-5"></i>
@@ -54,4 +46,3 @@
         </div>
     </div>
 </nav>
-@endsection
