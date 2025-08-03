@@ -1,10 +1,5 @@
 
-@extends('layouts.app')
 
-
-
-
-@section('content')
 
 <!DOCTYPE html>
 <html lang="en">
@@ -449,12 +444,113 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #555;
         }
+
+   .dashboard {
+        background: linear-gradient(to right, #f3f4f6, #e5e7eb);
+        min-height: 100vh;
+        padding: 3rem 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .welcome-heading {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(90deg, #8b5cf6, #ec4899);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+
+    .welcome-subtext {
+        font-size: 1.1rem;
+        color: #4b5563;
+        text-align: center;
+        max-width: 700px;
+        margin-bottom: 2.5rem;
+    }
+
+    .module-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        width: 100%;
+        max-width: 1000px;
+    }
+
+    .module-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .module-card:hover {
+        transform: translateY(-5px);
+        border-color: #8b5cf6;
+    }
+
+    .module-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #111827;
+    }
+
+    .module-description {
+        font-size: 0.95rem;
+        color: #6b7280;
+        margin-bottom: 1.5rem;
+    }
+
+    .module-button {
+        padding: 0.75rem 1rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+        border-radius: 10px;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .module-button.active {
+        background: linear-gradient(to right, #8b5cf6, #ec4899);
+        color: white;
+        cursor: pointer;
+    }
+
+    .module-button.locked {
+        background: #d1d5db;
+        color: #6b7280;
+        cursor: not-allowed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.3rem;
+    }
+
+    .module-button.locked i {
+        font-size: 1rem;
+    }
+
+
+
+
+
+
     </style>
 </head>
 <body>
+
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="{{ url('/') }}">
             <i class="fab fa-python me-2"></i>PythonLearn
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -473,306 +569,73 @@
                     <a class="nav-link" href="#testimonials">Reviews</a>
                 </li>
 
-                @guest
-                    <!-- Show if not logged in -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">Login</a>
-                    </li>
-                    <li class="nav-item ms-2">
-                        <a class="btn btn-gradient text-white" href="{{ route('register') }}">Get Started</a>
-                    </li>
-                @else
-                    <!-- Show if logged in -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle fs-5"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                            <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
-                            <li>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item">Logout</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                @endguest
+          @if (Auth::check()) <!-- Check if user is logged in -->
+    <li class="nav-item dropdown">
+        <!-- Use href="#" to trigger the dropdown without navigating anywhere -->
+        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{ Auth::user()->name }}
+        </a>
+        <!-- Dropdown menu -->
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+            <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
+            <li>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="dropdown-item">Logout</button>
+                </form>
+            </li>
+        </ul>
+    </li>
+@else <!-- Show login/register links if not logged in -->
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('login') }}">Login</a>
+    </li>
+    <li class="nav-item ms-2">
+        <a class="btn btn-gradient text-white" href="{{ route('register') }}">Get Started</a>
+    </li>
+@endif
             </ul>
         </div>
     </div>
 </nav>
 
     <!-- Hero Section -->
-    <section class="hero-section">
-        <!-- Floating Elements -->
-        <div class="floating-element">
-            <i class="fab fa-python" style="font-size: 3rem; color: white;"></i>
-        </div>
-        <div class="floating-element">
-            <i class="fas fa-code" style="font-size: 2.5rem; color: white;"></i>
-        </div>
-        <div class="floating-element">
-            <i class="fas fa-laptop-code" style="font-size: 3rem; color: white;"></i>
+    
+<div class="dashboard">
+    <h1 class="welcome-heading">Welcome to Your Python Journey!</h1>
+    <p class="welcome-subtext">
+        Learn Python programming step by step with our interactive modules designed for non-CS students.
+    </p>
+
+    <div class="module-grid">
+        <div class="module-card">
+            <div>
+                <h3 class="module-title">Level 1: Basics</h3>
+                <p class="module-description">Get started with variables, data types, and basic operations.</p>
+            </div>
+            <button class="module-button active">Start Learning 🚀</button>
         </div>
 
-        <div class="container hero-content">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <div class="python-logo fade-in-up">
-                        <i class="fab fa-python"></i>
-                    </div>
-                    <h1 class="hero-title fade-in-up delay-1">
-                        Learn Python<br>
-                        <span style="background: linear-gradient(135deg, #ffd343 0%, #ff6b6b 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">The Fun Way</span>
-                    </h1>
-                    <p class="hero-subtitle fade-in-up delay-2">
-                        Master Python programming with interactive lessons designed specifically for non-CS students. 
-                        No prior experience needed - just curiosity and determination!
-                    </p>
-                    <div class="fade-in-up delay-3">
-                        <a href="/register" class="btn btn-gradient me-3 mb-3">
-                            <i class="fas fa-rocket me-2"></i>Start Learning Free
-                        </a>
-                        <a href="#features" class="btn btn-outline-gradient mb-3">
-                            <i class="fas fa-play me-2"></i>Watch Demo
-                        </a>
-                    </div>
-                    <div class="mt-4 fade-in-up delay-3">
-                        <small style="color: rgba(255,255,255,0.8);">
-                            <i class="fas fa-users me-2"></i>Join 10,000+ students already learning
-                        </small>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="code-preview fade-in-up delay-2">
-                        <div class="code-line">
-                            <span class="code-comment"># Your first Python program</span>
-                        </div>
-                        <div class="code-line">
-                            <span class="code-keyword">def</span> <span class="code-function">welcome_student</span>():
-                        </div>
-                        <div class="code-line" style="padding-left: 2rem;">
-                            <span class="code-keyword">name</span> = <span class="code-string">"Future Programmer"</span>
-                        </div>
-                        <div class="code-line" style="padding-left: 2rem;">
-                            <span class="code-keyword">print</span>(<span class="code-string">f"Hello {name}!"</span>)
-                        </div>
-                        <div class="code-line" style="padding-left: 2rem;">
-                            <span class="code-keyword">print</span>(<span class="code-string">"Let's build amazing things!"</span>)
-                        </div>
-                        <div class="code-line"></div>
-                        <div class="code-line">
-                            <span class="code-comment"># Call the function</span>
-                        </div>
-                        <div class="code-line">
-                            <span class="code-function">welcome_student</span>()
-                        </div>
-                    </div>
-                </div>
+        <div class="module-card">
+            <div>
+                <h3 class="module-title">Level 2: Control Structures</h3>
+                <p class="module-description">Learn about if/else statements, loops, and more.</p>
             </div>
+            <button class="module-button locked">
+                <i class="fas fa-lock"></i>
+                Start Learning
+            </button>
         </div>
-    </section>
 
-    <!-- Stats Section -->
-    <section class="stats-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3 col-6">
-                    <div class="stat-item">
-                        <span class="stat-number">10K+</span>
-                        <div class="stat-label">Students</div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="stat-item">
-                        <span class="stat-number">95%</span>
-                        <div class="stat-label">Success Rate</div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="stat-item">
-                        <span class="stat-number">50+</span>
-                        <div class="stat-label">Projects</div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-6">
-                    <div class="stat-item">
-                        <span class="stat-number">24/7</span>
-                        <div class="stat-label">Support</div>
-                    </div>
-                </div>
+        <div class="module-card">
+            <div>
+                <h3 class="module-title">Level 3: Functions & Lists</h3>
+                <p class="module-description">Dive into functions, lists, and dictionaries.</p>
             </div>
+            <button class="module-button locked">
+                <i class="fas fa-lock"></i>
+                Start Learning
+            </button>
         </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="py-5" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
-        <div class="container">
-            <div class="row text-center mb-5">
-                <div class="col-lg-8 mx-auto">
-                    <h2 class="display-4 fw-bold mb-3">Why Choose PythonLearn?</h2>
-                    <p class="lead text-muted">Designed specifically for beginners with no programming background</p>
-                </div>
-            </div>
-            <div class="row g-4">
-                <div class="col-lg-4">
-                    <div class="feature-card">
-                        <div class="feature-icon beginner">
-                            <i class="fas fa-seedling"></i>
-                        </div>
-                        <h4 class="fw-bold mb-3">Beginner Friendly</h4>
-                        <p class="text-muted">Start from absolute zero. No technical jargon, just plain English explanations that make sense.</p>
-                        <ul class="list-unstyled text-start mt-3">
-                            <li><i class="fas fa-check text-success me-2"></i>Step-by-step guidance</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Visual learning aids</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Real-world examples</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="feature-card">
-                        <div class="feature-icon interactive">
-                            <i class="fas fa-gamepad"></i>
-                        </div>
-                        <h4 class="fw-bold mb-3">Interactive Learning</h4>
-                        <p class="text-muted">Learn by doing with our hands-on exercises and instant feedback system.</p>
-                        <ul class="list-unstyled text-start mt-3">
-                            <li><i class="fas fa-check text-success me-2"></i>Code playground</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Instant results</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Gamified progress</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="feature-card">
-                        <div class="feature-icon practical">
-                            <i class="fas fa-rocket"></i>
-                        </div>
-                        <h4 class="fw-bold mb-3">Practical Projects</h4>
-                        <p class="text-muted">Build real applications that you can show off to friends and future employers.</p>
-                        <ul class="list-unstyled text-start mt-3">
-                            <li><i class="fas fa-check text-success me-2"></i>Portfolio projects</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Industry tools</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Career guidance</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Course Preview -->
-    <section id="courses" class="py-5">
-        <div class="container">
-            <div class="row text-center mb-5">
-                <div class="col-lg-8 mx-auto">
-                    <h2 class="display-4 fw-bold mb-3">What You'll Learn</h2>
-                    <p class="lead text-muted">Comprehensive curriculum designed for complete beginners</p>
-                </div>
-            </div>
-            <div class="row g-4">
-                <div class="col-lg-6">
-                    <div class="card border-0 shadow-lg h-100">
-                        <div class="card-body p-4">
-                            <div class="d-flex align-items-center mb-3">
-                                <div class="bg-primary bg-gradient rounded-circle p-3 me-3">
-                                    <i class="fas fa-play text-white"></i>
-                                </div>
-                                <h5 class="card-title mb-0">Python Fundamentals</h5>
-                            </div>
-                            <ul class="list-unstyled">
-                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Variables and Data Types</li>
-                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Control Flow (if/else, loops)</li>
-                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Functions and Modules</li>
-                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Error Handling</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="card border-0 shadow-lg h-100">
-                        <div class="card-body p-4">
-                            <div class="d-flex align-items-center mb-3">
-                                <div class="bg-success bg-gradient rounded-circle p-3 me-3">
-                                    <i class="fas fa-database text-white"></i>
-                                </div>
-                                <h5 class="card-title mb-0">Data & Web</h5>
-                            </div>
-                            <ul class="list-unstyled">
-                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Working with Files</li>
-                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Web Scraping Basics</li>
-                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>APIs and JSON</li>
-                                <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Simple Web Apps</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section id="testimonials" class="py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-        <div class="container">
-            <div class="row text-center mb-5">
-                <div class="col-lg-8 mx-auto">
-                    <h2 class="display-4 fw-bold text-white mb-3">What Students Say</h2>
-                    <p class="lead text-white-50">Real feedback from real students</p>
-                </div>
-            </div>
-            <div class="row g-4">
-                <div class="col-lg-4">
-                    <div class="testimonial-card">
-                        <p class="mb-4">"I never thought I could code, but PythonLearn made it so easy and fun! The explanations are crystal clear."</p>
-                        <div class="d-flex align-items-center">
-                            <div class="student-avatar me-3">SM</div>
-                            <div>
-                                <h6 class="mb-0">Sarah Mitchell</h6>
-                                <small class="text-muted">Marketing Student</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="testimonial-card">
-                        <p class="mb-4">"The interactive exercises kept me engaged throughout. I built my first web scraper in just 3 weeks!"</p>
-                        <div class="d-flex align-items-center">
-                            <div class="student-avatar me-3">JD</div>
-                            <div>
-                                <h6 class="mb-0">John Davis</h6>
-                                <small class="text-muted">Business Student</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <div class="testimonial-card">
-                        <p class="mb-4">"Perfect for beginners! The step-by-step approach helped me understand concepts I thought were impossible."</p>
-                        <div class="d-flex align-items-center">
-                            <div class="student-avatar me-3">AL</div>
-                            <div>
-                                <h6 class="mb-0">Anna Lopez</h6>
-                                <small class="text-muted">Art Student</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="py-5" style="background: var(--dark-bg);">
-        <div class="container text-center">
-            <div class="row">
-                <div class="col-lg-8 mx-auto">
-                    <h2 class="display-4 fw-bold text-white mb-3">Ready to Start Your Coding Journey?</h2>
-                    <p class="lead text-white-50 mb-4">Join thousands of students who have already transformed their careers with Python</p>
-                    <div>
-                        <a href="/register" class="btn btn-gradient btn-lg me-3">
-                            <i class="fas fa-rocket me-2"></i>Start Free Trial
-                        </a>
-                        <a href="/login" class="btn btn-outline-light btn-lg">
-                            <i class="fas fa-sign-in-alt me-2"></i>Login
-  @endsection
+    </div>
+</div>

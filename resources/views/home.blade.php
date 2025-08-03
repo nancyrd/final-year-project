@@ -465,7 +465,7 @@
                         <a class="nav-link" href="#testimonials">Reviews</a>
                     </li>
                  <li class="nav-item">
-    <a class="nav-link" href="{{ route('force.login') }}">Login</a>
+    <a class="nav-link" href="{{ route('login') }}">Login</a>
 
 </li>
                     <li class="nav-item ms-2">

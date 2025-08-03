@@ -9,6 +9,7 @@ use App\Http\Controllers\LevelController;
 use App\Http\Controllers\PreAssessmentController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\PostAssessmentController;
+use App\Http\Controllers\QuizController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -33,6 +34,12 @@ Route::middleware('auth')->group(function () {
 
     // Post-assessment (for each level)
     Route::get('/levels/{level}/post-assessment', [PostAssessmentController::class, 'show'])->name('levels.post-assessment');
+    Route::get('/pre-assessment', [QuizController::class, 'showPreAssessment'])->name('pre-assessment');
+    
+    // Submit the pre-assessment quiz
+    Route::post('/pre-assessment', [QuizController::class, 'submitPreAssessment']);
+
+    
 
 });
 Route::get('/progress', function () {
@@ -41,7 +48,8 @@ Route::get('/progress', function () {
 Route::get('/help', function () {
     return view('help');
 })->middleware(['auth'])->name('help');
-Route::get('/force-login', function () {
+Route::get('/login', function () {
     return view('auth.login');
-})->name('force.login');
+})->middleware('guest')->name('login');
+
 require __DIR__.'/auth.php';
