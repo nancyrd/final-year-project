@@ -10,6 +10,13 @@ use App\Http\Controllers\PreAssessmentController;
 use App\Http\Controllers\LessonController;
 use App\Http\Controllers\PostAssessmentController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\AssessmentController;
+use App\Http\Controllers\StageController;
+
+
+
+
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
@@ -21,25 +28,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
  Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/levels', [LevelController::class, 'index'])->name('levels.index');
-
-
-      Route::get('/levels', [LevelController::class, 'index'])->name('levels.index');
-
-    // Pre-assessment (for each level)
-     Route::post('/levels/{level}/pre-assessment', [PreAssessmentController::class, 'submit'])->name('levels.pre-assessment.submit');
-
-    // Change this route to handle POST requests as well
-    Route::post('/levels/{level}/lesson', [LessonController::class, 'submit'])->name('levels.lesson.submit');
-
-    // Post-assessment (for each level)
-    Route::get('/levels/{level}/post-assessment', [PostAssessmentController::class, 'show'])->name('levels.post-assessment');
-    Route::get('/pre-assessment', [QuizController::class, 'showPreAssessment'])->name('pre-assessment');
-    
-    // Submit the pre-assessment quiz
-    Route::post('/pre-assessment', [QuizController::class, 'submitPreAssessment']);
-
-    
 
 });
 Route::get('/progress', function () {
@@ -51,5 +39,46 @@ Route::get('/help', function () {
 Route::get('/login', function () {
     return view('auth.login');
 })->middleware('guest')->name('login');
+
+
+
+
+Route::middleware(['auth'])->group(function () {
+    // Pre-assessment routes
+   // Route::get('/stage/{stage}/pre-assessment', [AssessmentController::class, 'showPreAssessment'])
+  //      ->name('assessment.pre.show');
+  //  Route::post('/stage/{stage}/pre-assessment', [AssessmentController::class, 'submitPreAssessment'])
+  //      ->name('assessment.pre.submit');
+    
+//   // Stage routes
+    Route::get('/stage/{stage}', [StageController::class, 'show'])
+        ->name('stage.show');
+
+
+
+       //     Route::get('/stage/{stage}/level/{level}', [LevelController::class, 'show'])
+      //  ->name('level.show');
+
+
+
+        Route::get('/stage/{stageName}/pre-assessment', [StageController::class, 'showPreAssessment'])
+     ->name('stage.pre-assessment');
+     Route::post('/stage/{stageName}/submit-assessment', [StageController::class, 'processAssessment'])
+     ->name('stage.submit-assessment');
+    
+Route::get('/stage/{stage}/{level}', [StageController::class, 'showLevel'])
+     ->name('stage.level');
+});
+
+
+
+
+Route::middleware(['auth', 'check.stage.access:variables'])->group(function () {
+    Route::get('/stage/variables/pre-assessment', [StageController::class, 'showPreAssessment'])->name('stage.pre-assessment');
+    Route::post('/stage/variables/submit-assessment', [StageController::class, 'submitAssessment']);
+    Route::get('/stage/variables/{level}', [StageController::class, 'showLevel'])->name('stage.level');
+    Route::post('/stage/variables/{level}/complete', [StageController::class, 'completeLevel']);
+});
+
 
 require __DIR__.'/auth.php';

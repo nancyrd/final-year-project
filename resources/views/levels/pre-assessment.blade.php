@@ -1,26 +1,24 @@
-<!-- resources/views/levels/pre-assessment.blade.php -->
-
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto py-8">
-    <h1 class="text-3xl font-bold text-purple-700 mb-8">Pre-assessment for Level {{ $level }}</h1>
+<div class="container mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold text-center">Pre-Assessment Quiz</h2>
+    <p class="text-center text-gray-600">Take this quiz to help us understand your current knowledge of Python.</p>
 
-    <form action="{{ route('levels.lesson', $level) }}" method="POST">
+    <form action="{{ route('pre-assessment.submit') }}" method="POST">
         @csrf
-        @foreach($questions as $question)
-        <div class="mb-6">
-            <p class="font-semibold text-lg">{{ $question['question'] }}</p>
-            @foreach($question['options'] as $option)
-            <div class="mt-2">
-                <input type="radio" name="question_{{ $question['id'] }}" value="{{ $option }}" required>
-                <label>{{ $option }}</label>
+        @foreach($quiz as $question)
+        <div class="my-4">
+            <p class="font-semibold">{{ $question->question }}</p>
+            @foreach($question->options as $option)
+            <div class="form-check">
+                <input type="radio" class="form-check-input" name="answers[{{ $question->id }}]" value="{{ $option }}" required>
+                <label class="form-check-label">{{ $option }}</label>
             </div>
             @endforeach
         </div>
         @endforeach
-
-        <button type="submit" class="bg-purple-600 text-white py-2 px-4 rounded-md">Submit Pre-assessment</button>
+        <button type="submit" class="btn btn-primary">Submit Quiz</button>
     </form>
 </div>
 @endsection

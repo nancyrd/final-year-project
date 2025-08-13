@@ -1,641 +1,526 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PythonLearn - Code Your Future</title>
-    
-    <!-- Bootstrap 5.3 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            --dark-bg: #0f0f23;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --text-primary: #2d3748;
-            --text-secondary: #718096;
-            --border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--text-primary);
-            overflow-x: hidden;
-        }
-
-        /* Animated Background */
-        .hero-section {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            position: relative;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
-            animation: drift 20s linear infinite;
-        }
-
-        @keyframes drift {
-            0% { transform: translateX(0px); }
-            100% { transform: translateX(-60px); }
-        }
-
-        /* Floating Elements */
-        .floating-element {
-            position: absolute;
-            opacity: 0.1;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .floating-element:nth-child(1) {
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .floating-element:nth-child(2) {
-            top: 60%;
-            right: 10%;
-            animation-delay: 2s;
-        }
-
-        .floating-element:nth-child(3) {
-            bottom: 20%;
-            left: 20%;
-            animation-delay: 4s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
-        }
-
-        /* Navigation */
-        .navbar {
-            background: rgba(255, 255, 255, 0.95) !important;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-
-        .navbar-brand {
-            font-weight: 800;
-            font-size: 1.5rem;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-link {
-            font-weight: 500;
-            color: var(--text-primary) !important;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .nav-link:hover {
-            color: #667eea !important;
-            transform: translateY(-2px);
-        }
-
-        /* Buttons */
-        .btn-gradient {
-            background: var(--primary-gradient);
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-gradient:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-gradient::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn-gradient:hover::before {
-            left: 100%;
-        }
-
-        .btn-outline-gradient {
-            background: transparent;
-            border: 2px solid transparent;
-            background-clip: padding-box;
-            position: relative;
-            padding: 10px 28px;
-            border-radius: 50px;
-            font-weight: 600;
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .btn-outline-gradient::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: -1;
-            margin: -2px;
-            border-radius: inherit;
-            background: var(--primary-gradient);
-        }
-
-        .btn-outline-gradient:hover {
-            background: var(--primary-gradient);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
-        }
-
-        /* Hero Content */
-        .hero-content {
-            z-index: 2;
-            position: relative;
-        }
-
-        .hero-title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            font-weight: 800;
-            color: white;
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
-        }
-
-        .hero-subtitle {
-            font-size: clamp(1.1rem, 2vw, 1.3rem);
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 2rem;
-            font-weight: 400;
-        }
-
-        .python-logo {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #3776ab 0%, #ffd343 100%);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            color: white;
-            margin-bottom: 1rem;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-
-        /* Feature Cards */
-        .feature-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            height: 100%;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .feature-icon {
-            width: 70px;
-            height: 70px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            color: white;
-            margin: 0 auto 1.5rem;
-        }
-
-        .feature-icon.beginner { background: var(--success-gradient); }
-        .feature-icon.interactive { background: var(--warning-gradient); }
-        .feature-icon.practical { background: var(--secondary-gradient); }
-
-        /* Stats Section */
-        .stats-section {
-            background: var(--dark-bg);
-            color: white;
-            padding: 4rem 0;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 2rem 1rem;
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 800;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            display: block;
-        }
-
-        .stat-label {
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.9rem;
-        }
-
-        /* Code Preview */
-        .code-preview {
-            background: #1a1a2e;
-            border-radius: 15px;
-            padding: 2rem;
-            font-family: 'Fira Code', monospace;
-            color: #e94560;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .code-preview::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 30px;
-            background: #16213e;
-            display: flex;
-            align-items: center;
-            padding: 0 1rem;
-        }
-
-        .code-preview::after {
-            content: '● ● ●';
-            position: absolute;
-            top: 8px;
-            left: 15px;
-            color: #e94560;
-            font-size: 0.8rem;
-        }
-
-        .code-line {
-            margin: 0.5rem 0;
-            padding-left: 1rem;
-        }
-
-        .code-comment { color: #6c7293; }
-        .code-keyword { color: #bb86fc; }
-        .code-string { color: #4fc3f7; }
-        .code-function { color: #81c784; }
-
-        /* Testimonials */
-        .testimonial-card {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            margin: 1rem;
-            position: relative;
-        }
-
-        .testimonial-card::before {
-            content: '"';
-            position: absolute;
-            top: -10px;
-            left: 20px;
-            font-size: 4rem;
-            color: #667eea;
-            font-family: serif;
-        }
-
-        .student-avatar {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--primary-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 1.2rem;
-        }
-
-        /* Footer */
-        .footer {
-            background: var(--dark-bg);
-            color: white;
-            padding: 3rem 0 1rem;
-        }
-
-        .footer-title {
-            color: white;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .footer-link {
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-link:hover {
-            color: #667eea;
-        }
-
-        /* Animations */
-        .fade-in-up {
-            animation: fadeInUp 0.8s ease forwards;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .fade-in-up.delay-1 { animation-delay: 0.2s; }
-        .fade-in-up.delay-2 { animation-delay: 0.4s; }
-        .fade-in-up.delay-3 { animation-delay: 0.6s; }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero-section {
-                text-align: center;
-            }
-            
-            .feature-card {
-                margin-bottom: 2rem;
-            }
-            
-            .code-preview {
-                font-size: 0.8rem;
-            }
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--primary-gradient);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-
-   .dashboard {
-        background: linear-gradient(to right, #f3f4f6, #e5e7eb);
-        min-height: 100vh;
-        padding: 3rem 2rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+  <meta charset="UTF-8">
+  <title>PYTHON QUEST: ULTRA GAMIFIED</title>
+  <style>
+    /* === OUTRAGEOUS STYLES === */
+    :root {
+      --python-yellow: #FFD43B;
+      --python-blue: #4B8BBE;
+      --python-dark: #306998;
+      --neon-pink: #FF10F0;
+      --neon-green: #39FF14;
+      --neon-purple: #9400D3;
+      --matrix-green: #00FF41;
     }
 
-    .welcome-heading {
-        font-size: 2.5rem;
-        font-weight: 800;
-        background: linear-gradient(90deg, #8b5cf6, #ec4899);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-bottom: 0.5rem;
-        text-align: center;
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
-    .welcome-subtext {
-        font-size: 1.1rem;
-        color: #4b5563;
-        text-align: center;
-        max-width: 700px;
-        margin-bottom: 2.5rem;
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
 
-    .module-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 2rem;
-        width: 100%;
-        max-width: 1000px;
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
     }
 
-    .module-card {
-        background: white;
-        border-radius: 20px;
-        padding: 2rem;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        transition: all 0.3s ease;
-        border: 2px solid transparent;
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
-    .module-card:hover {
-        transform: translateY(-5px);
-        border-color: #8b5cf6;
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+      background: #000 url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h100v100H0z" fill="%23000"/><path d="M20 20h60v60H20z" fill="%23111" stroke="%23339" stroke-width="2"/></svg>');
+      color: white;
+      overflow-x: hidden;
     }
 
-    .module-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        color: #111827;
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
     }
 
-    .module-description {
-        font-size: 0.95rem;
-        color: #6b7280;
-        margin-bottom: 1.5rem;
+    /* === HEADER: 8-BIT GAME TITLE === */
+    .game-header {
+      background: linear-gradient(45deg, var(--neon-pink), var(--neon-green), var(--neon-purple));
+      background-size: 400% 400%;
+      animation: rainbow 5s infinite;
+      padding: 20px;
+      border-radius: 20px;
+      text-align: center;
+      margin-bottom: 30px;
+      border: 5px dashed white;
+      box-shadow: 0 0 30px var(--neon-pink);
     }
 
-    .module-button {
-        padding: 0.75rem 1rem;
-        font-weight: 600;
-        font-size: 0.95rem;
-        border-radius: 10px;
-        border: none;
-        transition: all 0.3s ease;
+    .game-header h1 {
+      font-size: 3.5rem;
+      margin: 0;
+      text-shadow: 5px 5px 0 black, -2px -2px 0 var(--python-yellow);
+      letter-spacing: 3px;
     }
 
-    .module-button.active {
-        background: linear-gradient(to right, #8b5cf6, #ec4899);
-        color: white;
-        cursor: pointer;
+    .game-header p {
+      font-size: 1.5rem;
+      margin: 10px 0 0;
+      text-shadow: 2px 2px 0 black;
     }
 
-    .module-button.locked {
-        background: #d1d5db;
-        color: #6b7280;
-        cursor: not-allowed;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.3rem;
+    /* === PLAYER STATS: RPG-STYLE === */
+    .player-stats {
+      display: flex;
+      justify-content: space-between;
+      background: rgba(0, 0, 0, 0.7);
+      border: 3px solid var(--python-yellow);
+      border-radius: 15px;
+      padding: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 20px var(--python-blue);
     }
 
-    .module-button.locked i {
-        font-size: 1rem;
+    .stat-box {
+      text-align: center;
+      padding: 10px;
+      flex: 1;
+      position: relative;
     }
 
+    .stat-box::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 10%;
+      height: 80%;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, var(--neon-green), transparent);
+    }
 
+    .stat-box:last-child::after {
+      display: none;
+    }
 
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin: 5px 0;
+      color: var(--python-yellow);
+      text-shadow: 0 0 10px var(--neon-pink);
+    }
 
+    .stat-label {
+      font-size: 1rem;
+      color: white;
+      text-transform: uppercase;
+    }
 
+    /* === STAGES: GAME WORLD MAP === */
+    .stage {
+      background: rgba(0, 0, 0, 0.8);
+      border: 4px solid var(--python-blue);
+      border-radius: 20px;
+      margin-bottom: 30px;
+      overflow: hidden;
+      box-shadow: 0 0 25px var(--python-dark);
+      position: relative;
+    }
 
-    </style>
+    .stage::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--neon-pink), var(--neon-green), var(--neon-purple));
+    }
+
+    .stage-header {
+      background: linear-gradient(90deg, var(--python-dark), var(--python-blue));
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stage-title-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .stage-title {
+      font-size: 1.8rem;
+      margin: 0;
+      color: var(--python-yellow);
+      text-shadow: 2px 2px 0 black;
+    }
+
+    .start-stage-btn {
+      background: var(--neon-green);
+      color: black;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 15px var(--neon-green);
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+
+    .start-stage-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px var(--neon-green);
+    }
+
+    .stage-status {
+      background: black;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      border: 2px solid var(--neon-green);
+    }
+
+    .stage-status.completed {
+      background: var(--neon-green);
+      color: black;
+    }
+
+    .stage-status.in-progress {
+      background: var(--python-yellow);
+      color: black;
+      animation: pulse 2s infinite;
+    }
+
+    .stage-status.locked {
+      background: #333;
+      color: #999;
+    }
+
+    .levels-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    /* === LOCKED LEVEL CARDS === */
+    .level-card {
+      background: rgba(30, 30, 30, 0.9);
+      border-radius: 15px;
+      padding: 20px;
+      border: 2px solid #444;
+      position: relative;
+      overflow: hidden;
+      opacity: 0.7;
+    }
+
+    .level-card::before {
+      content: "🔒";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3rem;
+      opacity: 0.3;
+    }
+
+    .level-title {
+      font-size: 1.5rem;
+      margin: 0 0 10px;
+      color: #aaa;
+    }
+
+    .level-desc {
+      font-size: 0.9rem;
+      color: #666;
+      margin: 0 0 15px;
+    }
+
+    .level-status {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #333;
+      color: #999;
+      padding: 3px 10px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      border: 1px solid #555;
+    }
+
+    .level-progress {
+      height: 10px;
+      background: #333;
+      border-radius: 5px;
+      margin-top: 15px;
+      overflow: hidden;
+    }
+
+    .level-progress-bar {
+      height: 100%;
+      background: #444;
+      border-radius: 5px;
+      width: 0% !important;
+    }
+
+    .level-hint {
+      margin-top: 15px;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.5);
+      border-left: 3px solid var(--neon-purple);
+      font-style: italic;
+      color: #666;
+      position: relative;
+    }
+
+    .level-hint::before {
+      content: "💡";
+      position: absolute;
+      left: -25px;
+      top: 5px;
+      font-size: 1.2rem;
+      animation: float 3s infinite;
+    }
+
+    /* === SPECIAL EFFECTS === */
+    .floating-snake {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      font-size: 4rem;
+      animation: float 3s infinite, spin 10s linear infinite;
+      filter: drop-shadow(0 0 10px var(--neon-green));
+      z-index: 100;
+      cursor: pointer;
+    }
+
+    .matrix-rain {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.05;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
+  <!-- MATRIX RAIN BACKGROUND (VISUAL EFFECT) -->
+  <div class="matrix-rain"></div>
 
-<nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="{{ url('/') }}">
-            <i class="fab fa-python me-2"></i>PythonLearn
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+  <!-- FLOATING PYTHON MASCOT -->
+  <div class="floating-snake">🐍</div>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#features">Features</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#courses">Courses</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#testimonials">Reviews</a>
-                </li>
+  <div class="container">
+    <!-- GAME HEADER -->
+    <header class="game-header">
+      <h1>PYTHON QUEST</h1>
+      <p>Level up your coding skills in this epic adventure!</p>
+    </header>
 
-          @if (Auth::check()) <!-- Check if user is logged in -->
-    <li class="nav-item dropdown">
-        <!-- Use href="#" to trigger the dropdown without navigating anywhere -->
-        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {{ Auth::user()->name }}
-        </a>
-        <!-- Dropdown menu -->
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-            <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profile</a></li>
-            <li>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="dropdown-item">Logout</button>
-                </form>
-            </li>
-        </ul>
-    </li>
-@else <!-- Show login/register links if not logged in -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('login') }}">Login</a>
-    </li>
-    <li class="nav-item ms-2">
-        <a class="btn btn-gradient text-white" href="{{ route('register') }}">Get Started</a>
-    </li>
-@endif
-            </ul>
-        </div>
+    <!-- PLAYER STATS -->
+    <div class="player-stats">
+      <div class="stat-box">
+        <div class="stat-label">Level</div>
+        <div class="stat-value">5</div>
+        <div class="stat-label">Code Novice</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">XP</div>
+        <div class="stat-value">1,240</div>
+        <div class="stat-label">Points</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Streak</div>
+        <div class="stat-value">7</div>
+        <div class="stat-label">Days 🔥</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Coins</div>
+        <div class="stat-value">320</div>
+        <div class="stat-label">🪙</div>
+      </div>
     </div>
-</nav>
 
-    <!-- Hero Section -->
-    
-<div class="dashboard">
-    <h1 class="welcome-heading">Welcome to Your Python Journey!</h1>
-    <p class="welcome-subtext">
-        Learn Python programming step by step with our interactive modules designed for non-CS students.
-    </p>
+    <!-- STAGE 1: VARIABLES CASTLE -->
+   <div class="stage">
+  <div class="stage-header">
+    <div class="stage-title-container">
+      <h2 class="stage-title">🏰 Variables Castle</h2>
 
-    <div class="module-grid">
-        <div class="module-card">
-            <div>
-                <h3 class="module-title">Level 1: Basics</h3>
-                <p class="module-description">Get started with variables, data types, and basic operations.</p>
-            </div>
-            <button class="module-button active">Start Learning 🚀</button>
-        </div>
+      @php
+          $unlocked = $stageData['variables']['unlocked_levels'] ?? [];
+          $score = $stageData['variables']['score'] ?? null;
+      @endphp
 
-        <div class="module-card">
-            <div>
-                <h3 class="module-title">Level 2: Control Structures</h3>
-                <p class="module-description">Learn about if/else statements, loops, and more.</p>
-            </div>
-            <button class="module-button locked">
-                <i class="fas fa-lock"></i>
-                Start Learning
-            </button>
-        </div>
+      @if ($score)
+        <p style="color:lime; font-weight:bold;">Previous Score: {{ $score }}%</p>
+      @endif
 
-        <div class="module-card">
-            <div>
-                <h3 class="module-title">Level 3: Functions & Lists</h3>
-                <p class="module-description">Dive into functions, lists, and dictionaries.</p>
-            </div>
-            <button class="module-button locked">
-                <i class="fas fa-lock"></i>
-                Start Learning
-            </button>
-        </div>
+      <a href="{{ route('stage.pre-assessment', ['stageName' => 'variables']) }}" class="start-stage-btn">
+        Start Level
+      </a>
     </div>
+    <span class="stage-status {{ $score >= 80 ? 'completed' : ($score ? 'in-progress' : 'locked') }}">
+      {{ $score >= 80 ? 'COMPLETED' : ($score ? 'IN PROGRESS' : 'LOCKED') }}
+    </span>
+  </div>
+
+  <div class="levels-container">
+    @for ($i = 1; $i <= 3; $i++)
+    <div class="level-card {{ in_array($i, $unlocked) ? '' : 'locked' }}">
+      <span class="level-status {{ in_array($i, $unlocked) ? 'in-progress' : 'locked' }}">
+        {{ in_array($i, $unlocked) ? 'UNLOCKED' : 'LOCKED' }}
+      </span>
+
+      <h3 class="level-title">Level {{ $i }}: @switch($i)
+        @case(1) Basic Variables @break
+        @case(2) Data Types @break
+        @case(3) Type Conversion @break
+      @endswitch</h3>
+
+      <p class="level-desc">
+        @switch($i)
+          @case(1) Store and use simple data @break
+          @case(2) Numbers, strings, and booleans @break
+          @case(3) Change data types magically @break
+        @endswitch
+      </p>
+
+      <div class="level-progress">
+        <div class="level-progress-bar"></div>
+      </div>
+
+      <div class="level-hint">
+        @switch($i)
+          @case(1) "Variables are like labeled treasure chests!" @break
+          @case(2) "type() is your inspection spell!" @break
+          @case(3) "int(), float(), str() are your transformation spells!" @break
+        @endswitch
+      </div>
+    </div>
+    @endfor
+  </div>
 </div>
+      
+     
+    <!-- STAGE 2: LOOPS LAGOON -->
+    <div class="stage">
+      <div class="stage-header">
+        <div class="stage-title-container">
+          <h2 class="stage-title">🌊 Loops Lagoon</h2>
+          <a href="/stage/loops" class="start-stage-btn">Start Level</a>
+        </div>
+        <span class="stage-status locked">LOCKED</span>
+      </div>
+      <div class="levels-container">
+        <!-- LEVEL 1 -->
+        <div class="level-card">
+          <span class="level-status locked">LOCKED</span>
+          <h3 class="level-title">Level 1: For Loops</h3>
+          <p class="level-desc">Iterate through sequences</p>
+          <div class="level-progress">
+            <div class="level-progress-bar"></div>
+          </div>
+          <div class="level-hint">
+            "Like a rollercoaster going through each car!"
+          </div>
+        </div>
+        
+        <!-- LEVEL 2 -->
+        <div class="level-card">
+          <span class="level-status locked">LOCKED</span>
+          <h3 class="level-title">Level 2: While Loops</h3>
+          <p class="level-desc">Repeat while true</p>
+          <div class="level-progress">
+            <div class="level-progress-bar"></div>
+          </div>
+          <div class="level-hint">
+            "Don't forget to update your condition or you'll loop forever!"
+          </div>
+        </div>
+        
+        <!-- LEVEL 3 -->
+        <div class="level-card">
+          <span class="level-status locked">LOCKED</span>
+          <h3 class="level-title">Level 3: Nested Loops</h3>
+          <p class="level-desc">Loops within loops</p>
+          <div class="level-progress">
+            <div class="level-progress-bar"></div>
+          </div>
+          <div class="level-hint">
+            "Complete Level 2 or score 85+ on pre-assessment!"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAGE 3: FUNCTIONS FORTRESS -->
+    <div class="stage">
+      <div class="stage-header">
+        <div class="stage-title-container">
+          <h2 class="stage-title">⚔️ Functions Fortress</h2>
+          <a href="/stage/functions" class="start-stage-btn">Start Level</a>
+        </div>
+        <span class="stage-status locked">LOCKED</span>
+      </div>
+      <div class="levels-container">
+        <!-- LEVEL 1 -->
+        <div class="level-card">
+          <span class="level-status locked">LOCKED</span>
+          <h3 class="level-title">Level 1: Basic Functions</h3>
+          <p class="level-desc">Define and call functions</p>
+          <div class="level-progress">
+            <div class="level-progress-bar"></div>
+          </div>
+          <div class="level-hint">
+            "Functions are like magic spells you can reuse!"
+          </div>
+        </div>
+        
+        <!-- LEVEL 2 -->
+        <div class="level-card">
+          <span class="level-status locked">LOCKED</span>
+          <h3 class="level-title">Level 2: Parameters</h3>
+          <p class="level-desc">Pass data into functions</p>
+          <div class="level-progress">
+            <div class="level-progress-bar"></div>
+          </div>
+          <div class="level-hint">
+            "Parameters are ingredients for your function spells!"
+          </div>
+        </div>
+        
+        <!-- LEVEL 3 -->
+        <div class="level-card">
+          <span class="level-status locked">LOCKED</span>
+          <h3 class="level-title">Level 3: Return Values</h3>
+          <p class="level-desc">Get data back from functions</p>
+          <div class="level-progress">
+            <div class="level-progress-bar"></div>
+          </div>
+          <div class="level-hint">
+            "Return is like the result of your magic spell!"
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -461,6 +461,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#courses">Courses</a>
                     </li>
+
+<li class="nav-item">
+    <a class="nav-link" href="{{ route('stage.show', ['stage' => 1]) }}">
+        <i class="fas fa-book me-1"></i> Start Learning
+    </a>
+</li>
+
+
+
                     <li class="nav-item">
                         <a class="nav-link" href="#testimonials">Reviews</a>
                     </li>
