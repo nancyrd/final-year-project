@@ -5,153 +5,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $stageTitle }} Pre-Assessment</title>
     <style>
-        :root {
-            --python-yellow: #FFD43B;
-            --python-blue: #4B8BBE;
-            --python-dark: #306998;
-            --neon-pink: #FF10F0;
-            --neon-green: #39FF14;
-            --neon-purple: #9400D3;
-            --incorrect-red: #F44336;
-        }
-        
-        body {
-            font-family: 'Arial Rounded MT Bold', sans-serif;
-            background: #000;
-            color: white;
-            margin: 0;
-            padding: 20px;
-        }
-        
-        .quiz-container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: rgba(0, 0, 0, 0.8);
-            border: 4px solid var(--python-blue);
-            border-radius: 20px;
-            box-shadow: 0 0 25px var(--python-dark);
-        }
-        
-        .question-container {
-            display: none;
-        }
-        
-        .question-container.active {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .question-text {
-            font-size: 1.3rem;
-            color: var(--python-yellow);
-            margin-bottom: 1.5rem;
-        }
-        
-        .options {
-            margin-left: 1rem;
-        }
-        
-        .option {
-            margin: 1rem 0;
-            padding: 1rem;
-            background: rgba(30, 30, 30, 0.9);
-            border-radius: 10px;
-            border: 1px solid #333;
-            transition: all 0.3s;
-        }
-        
-        .option:hover {
-            background: rgba(50, 50, 50, 0.9);
-            border-color: var(--python-blue);
-        }
-        
-        .option label {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-        
-        .option input[type="radio"] {
-            margin-right: 1rem;
-            accent-color: var(--python-blue);
-        }
-        
-        .quiz-nav {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-        }
-        
-        .quiz-btn {
-            background: var(--python-blue);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 30px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .quiz-btn:hover {
-            background: var(--python-dark);
-            transform: scale(1.05);
-        }
-        
-        .quiz-btn:disabled {
-            background: #333;
-            color: #666;
-            cursor: not-allowed;
-        }
-        
-        #submit-btn {
-            background: var(--neon-green);
-            color: black;
-            display: none;
-        }
-        
-        #submit-btn:hover {
-            background: var(--neon-green);
-            box-shadow: 0 0 15px var(--neon-green);
-        }
-        
-        .result-container {
-            display: none;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 2rem;
-            background: rgba(0, 0, 0, 0.9);
-            border-radius: 20px;
-            border: 3px solid var(--python-yellow);
-        }
-        
-        .score {
-            font-size: 2rem;
-            font-weight: bold;
-            margin: 1rem 0;
-        }
-        
-        .perfect-score {
-            color: var(--neon-green);
-            text-shadow: 0 0 10px var(--neon-green);
-        }
-        
-        .low-score {
-            color: var(--incorrect-red);
-        }
-        
-        .progress-indicator {
-            text-align: center;
-            margin: 1rem 0;
-            color: #aaa;
-        }
-    </style>
+  :root{
+    /* Dashboard palette */
+    --primary-purple:#7B2CBF;   /* headers / accents */
+    --secondary-purple:#9D4EDD; /* buttons / highlights */
+    --accent-purple:#5A189A;    /* hovers / emphasis */
+    --incorrect-red:#F44336;
+
+    --bg:#fafafa;
+    --panel:#ffffff;
+    --muted:#555;
+    --border:#d2b7f0;           /* subtle purple border */
+  }
+
+  body{
+    font-family: 'Arial Rounded MT Bold', sans-serif;
+    background: var(--bg);
+    color:#222;
+    margin:0;
+    padding:20px;
+  }
+
+  .quiz-container{
+    max-width:800px;
+    margin:2rem auto;
+    padding:2rem;
+    background: var(--panel);
+    border: 2px solid var(--border);
+    border-radius:20px;
+    box-shadow:0 0 10px rgba(0,0,0,.05);
+  }
+
+  .question-container{display:none;}
+  .question-container.active{display:block; animation:fadeIn .5s;}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+  .question-text{
+    font-size:1.3rem;
+    color: var(--primary-purple);
+    margin-bottom:1.5rem;
+  }
+
+  .options{margin-left:1rem;}
+
+  .option{
+    margin:1rem 0;
+    padding:1rem;
+    background:#f7f4fe;                 /* very light purple */
+    border-radius:10px;
+    border:1px solid var(--border);
+    transition:all .3s;
+  }
+  .option:hover{
+    background:#f2e9ff;
+    border-color: var(--secondary-purple);
+  }
+
+  .option label{display:flex; align-items:center; cursor:pointer;}
+  .option input[type="radio"]{
+    margin-right:1rem;
+    accent-color: var(--secondary-purple);
+  }
+
+  .quiz-nav{
+    display:flex;
+    justify-content:space-between;
+    margin-top:2rem;
+  }
+
+  .quiz-btn{
+    background: var(--secondary-purple);
+    color:#fff;
+    border:none;
+    padding:.8rem 1.5rem;
+    border-radius:30px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:all .3s;
+  }
+  .quiz-btn:hover{
+    background: var(--accent-purple);
+    transform:scale(1.05);
+  }
+  .quiz-btn:disabled{
+    background:#e6e2f6;
+    color:#9a8ec7;
+    cursor:not-allowed;
+  }
+
+  #submit-btn{
+    background: var(--primary-purple);
+    color:#fff;
+    display:none;
+  }
+  #submit-btn:hover{
+    background: var(--accent-purple);
+    box-shadow:0 0 12px rgba(123,44,191,.4);
+  }
+
+  .result-container{
+    display:none;
+    text-align:center;
+    padding:2rem;
+    margin-top:2rem;
+    background: var(--panel);
+    border-radius:20px;
+    border:2px solid var(--border);
+  }
+
+  .score{
+    font-size:2rem;
+    font-weight:bold;
+    margin:1rem 0;
+    color:#222;
+  }
+  .perfect-score{
+    color:#2e7d32;
+    text-shadow:none;
+  }
+  .low-score{color: var(--incorrect-red);}
+
+  .progress-indicator{
+    text-align:center;
+    margin:1rem 0;
+    color: var(--muted);
+  }
+</style>
+
 </head>
 <body>
     <div class="quiz-container">

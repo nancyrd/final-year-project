@@ -8,6 +8,8 @@ use App\Models\Question;
 use App\Models\UserAssessment;
 use App\Models\UserLevelAccess;
 use Illuminate\Http\Request;
+use App\Models\PreassessmentAnswer;
+
 
 class AssessmentController extends Controller
 {
@@ -31,59 +33,67 @@ class AssessmentController extends Controller
         ]);
     }
     
-    public function submitPreAssessment(Request $request, Stage $stage)
-    {
-        $questions = $stage->preAssessmentQuestions;
-        $score = 0;
-        
-        foreach ($questions as $question) {
-            $userAnswer = $request->input('question_'.$question->id);
-            if ($userAnswer === $question->correct_answer) {
-                $score++;
-            }
-        }
-        
-        $totalQuestions = $questions->count();
-        $passingScore = ceil($totalQuestions * 0.7); // 70% to pass
-        $passed = $score >= $passingScore;
-        
-        // Record assessment result
-        UserAssessment::create([
-            'user_id' => auth()->id(),
-            'stage_id' => $stage->id,
-            'type' => 'pre_assessment',
-            'score' => $score,
-            'passed' => $passed
+   public function submitPreAssessment(Request $request, Stage $stage)
+{
+    $questions = $stage->preAssessmentQuestions;
+    $score = 0;
+    $userId = auth()->id();
+
+    foreach ($questions as $question) {
+        $userAnswer = $request->input('question_' . $question->id);
+
+        // Save each individual answer
+        PreassessmentAnswer::create([
+            'user_id' => $userId,
+            'preassessment_question_id' => $question->id,
+            'selected_option' => $userAnswer,
         ]);
-        
-        // Handle level unlocking
-        if ($passed) {
-            // Unlock all levels in this stage
-            foreach ($stage->levels as $level) {
-                UserLevelAccess::updateOrCreate(
-                    ['user_id' => auth()->id(), 'level_id' => $level->id],
-                    ['unlocked' => true]
-                );
-            }
-            
-            $message = "Great job! You unlocked all levels in this stage.";
-        } else {
-            // Only unlock first level
-            $firstLevel = $stage->levels()->orderBy('order')->first();
+
+        if ($userAnswer === $question->correct_answer) {
+            $score++;
+        }
+    }
+
+    $totalQuestions = $questions->count();
+    $passingScore = ceil($totalQuestions * 0.7); // 70% to pass
+    $passed = $score >= $passingScore;
+
+    // Record overall assessment result
+    UserAssessment::create([
+        'user_id' => $userId,
+        'stage_id' => $stage->id,
+        'type' => 'pre_assessment',
+        'score' => $score,
+        'passed' => $passed
+    ]);
+
+    // Unlock levels based on result
+    if ($passed) {
+        foreach ($stage->levels as $level) {
             UserLevelAccess::updateOrCreate(
-                ['user_id' => auth()->id(), 'level_id' => $firstLevel->id],
+                ['user_id' => $userId, 'level_id' => $level->id],
                 ['unlocked' => true]
             );
-            
-            $message = "You've unlocked the first level. Complete it to unlock more!";
         }
-        
-        return redirect()->route('stage.show', $stage)
-            ->with('assessment_result', [
-                'passed' => $passed,
-                'score' => $score,
-                'total' => $totalQuestions,
-                'message' => $message
-            ]);
+
+        $message = "Great job! You unlocked all levels in this stage.";
+    } else {
+        $firstLevel = $stage->levels()->orderBy('order')->first();
+        UserLevelAccess::updateOrCreate(
+            ['user_id' => $userId, 'level_id' => $firstLevel->id],
+            ['unlocked' => true]
+        );
+
+        $message = "You've unlocked the first level. Complete it to unlock more!";
     }
+
+    return redirect()->route('stage.show', $stage)
+        ->with('assessment_result', [
+            'passed' => $passed,
+            'score' => $score,
+            'total' => $totalQuestions,
+            'message' => $message
+        ]);
+}
+
 }
