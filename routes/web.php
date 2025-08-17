@@ -34,16 +34,14 @@ Route::middleware('auth')->group(function () {
 Route::get('/progress', function () {
     return view('progress');
 })->middleware(['auth'])->name('progress');
-// Route::get('/help', function () {
-//     return view('help');
-// })->middleware(['auth'])->name('help');
+
 Route::get('/login', function () {
     return view('auth.login');
 })->middleware('guest')->name('login');
 
 
 
-
+//Help Center
 Route::view('/support', 'support.index')->name('support');
 
 Route::post('/support', [SupportController::class, 'submit'])
