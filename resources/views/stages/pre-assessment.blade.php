@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $stageTitle }} Pre-Assessment</title>
-    <style>
+@extends('layouts.mainApp')
+
+@section('title', $stageTitle . ' Pre-Assessment')
+
+@push('head')
+<style>
   :root{
     /* Dashboard palette */
     --primary-purple:#7B2CBF;   /* headers / accents */
@@ -18,13 +17,8 @@
     --border:#d2b7f0;           /* subtle purple border */
   }
 
-  body{
-    font-family: 'Arial Rounded MT Bold', sans-serif;
-    background: var(--bg);
-    color:#222;
-    margin:0;
-    padding:20px;
-  }
+  /* page background inherits from layout; keep same feel here too */
+  body{ background: var(--bg); }
 
   .quiz-container{
     max-width:800px;
@@ -119,11 +113,8 @@
     margin:1rem 0;
     color:#222;
   }
-  .perfect-score{
-    color:#2e7d32;
-    text-shadow:none;
-  }
-  .low-score{color: var(--incorrect-red);}
+  .perfect-score{ color:#2e7d32; text-shadow:none; }
+  .low-score{ color: var(--incorrect-red); }
 
   .progress-indicator{
     text-align:center;
@@ -131,278 +122,163 @@
     color: var(--muted);
   }
 </style>
+@endpush
 
-</head>
-<body>
-    <div class="quiz-container">
-        <h1>{{ $stageTitle }} Pre-Assessment</h1>
-        <p style="text-align: center;">Answer these 5 questions to unlock levels</p>
-        
-        <form id="quiz-form">
-            <!-- Question 1 -->
-            <div class="question-container active" id="question-1">
-                <div class="question-text">1. What symbol is used for single-line comments in Python?</div>
-                <div class="options">
-                    <div class="option">
-                        <label>
-                            <input type="radio" name="q1" value="a" required> //
-                        </label>
-                    </div>
-                    <div class="option">
-                        <label>
-                            <input type="radio" name="q1" value="b" required> #
-                        </label>
-                    </div>
-                    <div class="option">
-                        <label>
-                            <input type="radio" name="q1" value="c" required> --
-                        </label>
-                    </div>
-                </div>
-                <div class="quiz-nav">
-                    <button type="button" class="quiz-btn" disabled>Previous</button>
-                    <button type="button" class="quiz-btn next-btn">Next</button>
-                </div>
-            </div>
-            
-            <!-- Question 2 -->
-            <div class="question-container" id="question-2">
-                <div class="question-text">2. Which of these is NOT a valid Python data type?</div>
-                <div class="options">
-                    <div class="option">
-                        <label>
-                            <input type="radio" name="q2" value="a" required> int
-                        </label>
-                    </div>
-                    <div class="option">
-                        <label>
-                            <input type="radio" name="q2" value="b" required> str
-                        </label>
-                    </div>
-                    <div class="option">
-                        <label>
-                            <input type="radio" name="q2" value="c" required> char
-                        </label>
-                    </div>
-                </div>
-                <div class="quiz-nav">
-                    <button type="button" class="quiz-btn prev-btn">Previous</button>
-                    <button type="button" class="quiz-btn next-btn">Next</button>
-                </div>
-            </div>
-            
-            <!-- Question 3 -->
-            <div class="question-container" id="question-3">
-                <div class="question-text">3. What is the output of: print(3 + 2 * 2)</div>
-                <div class="options">
-                    <div class="option">
-                        <label>
-                            <input type="radio" name="q3" value="a" required> 10
-                        </label>
-                    </div>
-                    <div class="option">
-                        <label>
-                            <input type="radio" name="q3" value="b" required> 7
-                        </label>
-                    </div>
-                    <div class="option">
-                        <label>
-                            <input type="radio" name="q3" value="c" required> 12
-                        </label>
-                    </div>
-                </div>
-                <div class="quiz-nav">
-                    <button type="button" class="quiz-btn prev-btn">Previous</button>
-                    <button type="button" class="quiz-btn next-btn">Next</button>
-                </div>
-            </div>
-            
-            <!-- Question 4 -->
-            <div class="question-container" id="question-4">
-                <div class="question-text">4. How do you create a variable with the value 5?</div>
-                <div class="options">
-                    <div class="option">
-                        <label>
-                            <input type="radio" name="q4" value="a" required> variable = 5
-                        </label>
-                    </div>
-                    <div class="option">
-                        <label>
-                            <input type="radio" name="q4" value="b" required> 5 = variable
-                        </label>
-                    </div>
-                    <div class="option">
-                        <label>
-                            <input type="radio" name="q4" value="c" required> var variable 5
-                        </label>
-                    </div>
-                </div>
-                <div class="quiz-nav">
-                    <button type="button" class="quiz-btn prev-btn">Previous</button>
-                    <button type="button" class="quiz-btn next-btn">Next</button>
-                </div>
-            </div>
-            
-            <!-- Question 5 -->
-            <div class="question-container" id="question-5">
-                <div class="question-text">5. What does the print() function do?</div>
-                <div class="options">
-                    <div class="option">
-                        <label>
-                            <input type="radio" name="q5" value="a" required> Creates a new file
-                        </label>
-                    </div>
-                    <div class="option">
-                        <label>
-                            <input type="radio" name="q5" value="b" required> Displays output to the screen
-                        </label>
-                    </div>
-                    <div class="option">
-                        <label>
-                            <input type="radio" name="q5" value="c" required> Performs a calculation
-                        </label>
-                    </div>
-                </div>
-                <div class="quiz-nav">
-                    <button type="button" class="quiz-btn prev-btn">Previous</button>
-                    <button type="button" id="submit-btn">Submit Quiz</button>
-                </div>
-            </div>
-            
-            <div class="progress-indicator" id="progress">
-                Question 1 of 5
-            </div>
-        </form>
-        
-        <div class="result-container" id="result-container">
-            <h2>Your Results</h2>
-            <div id="score-display" class="score"></div>
-            <div id="unlock-message"></div>
-            <a href="/dashboard" class="quiz-btn" style="margin-top: 1rem;">Continue to Learning</a>
+@section('content')
+  <div class="quiz-container">
+    <h1>{{ $stageTitle }} Pre-Assessment</h1>
+    <p style="text-align: center;">Answer these 5 questions to unlock levels</p>
+
+    <form id="quiz-form">
+      <!-- Question 1 -->
+      <div class="question-container active" id="question-1">
+        <div class="question-text">1. What symbol is used for single-line comments in Python?</div>
+        <div class="options">
+          <div class="option"><label><input type="radio" name="q1" value="a" required> //</label></div>
+          <div class="option"><label><input type="radio" name="q1" value="b" required> #</label></div>
+          <div class="option"><label><input type="radio" name="q1" value="c" required> --</label></div>
         </div>
-    </div>
+        <div class="quiz-nav">
+          <button type="button" class="quiz-btn" disabled>Previous</button>
+          <button type="button" class="quiz-btn next-btn">Next</button>
+        </div>
+      </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const questions = document.querySelectorAll('.question-container');
-            const nextButtons = document.querySelectorAll('.next-btn');
-            const prevButtons = document.querySelectorAll('.prev-btn');
-            const submitButton = document.getElementById('submit-btn');
-            const progressIndicator = document.getElementById('progress');
-            const resultContainer = document.getElementById('result-container');
-            const scoreDisplay = document.getElementById('score-display');
-            const unlockMessage = document.getElementById('unlock-message');
-            const continueBtn = document.querySelector('#result-container .quiz-btn');
-            
-            let currentQuestion = 0;
-            
-            // Update progress indicator
-            function updateProgress() {
-                progressIndicator.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
-            }
-            
-            // Show current question
-            function showQuestion(index) {
-                questions.forEach((q, i) => {
-                    q.classList.toggle('active', i === index);
-                });
-                
-                // Hide submit button until last question
-                submitButton.style.display = (index === questions.length - 1) ? 'block' : 'none';
-                
-                updateProgress();
-            }
-            
-            // Next button click
-            nextButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    if (currentQuestion < questions.length - 1) {
-                        currentQuestion++;
-                        showQuestion(currentQuestion);
-                    }
-                });
-            });
-            
-            // Previous button click
-            prevButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    if (currentQuestion > 0) {
-                        currentQuestion--;
-                        showQuestion(currentQuestion);
-                    }
-                });
-            });
-            
-            // Submit quiz
-            submitButton.addEventListener('click', async function() {
-                const answers = {
-                    q1: 'b', // #
-                    q2: 'c', // char
-                    q3: 'b', // 7
-                    q4: 'a', // variable = 5
-                    q5: 'b'  // Displays output
-                };
-                
-                let score = 0;
-                
-                // Check answers
-                for (let i = 1; i <= questions.length; i++) {
-                    const selected = document.querySelector(`input[name="q${i}"]:checked`);
-                    if (selected && selected.value === answers[`q${i}`]) {
-                        score++;
-                    }
-                }
-                
-                // Calculate percentage
-                const percentage = (score / questions.length) * 100;
-                
-                // Display results
-                scoreDisplay.textContent = `Score: ${score}/${questions.length}`;
-                
-                if (score === questions.length) {
-                    scoreDisplay.className = 'score perfect-score';
-                    unlockMessage.innerHTML = `
-                        <p>🎉 Perfect score! All levels unlocked!</p>
-                        <p>You can start with any level you want.</p>
-                    `;
-                    continueBtn.href = "{{ route('stage.level', ['stage' => $stageName, 'level' => 1]) }}";
-                    
-                    // Unlock all levels (server-side)
-                    try {
-                        const response = await fetch('/stage/{{ $stageName }}/submit-assessment', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({
-                                score: percentage,
-                                unlocked_all: true
-                            })
-                        });
-                        
-                        if (!response.ok) {
-                            throw new Error('Failed to save results');
-                        }
-                    } catch (error) {
-                        console.error('Error:', error);
-                    }
-                } else {
-                    scoreDisplay.className = 'score low-score';
-                    unlockMessage.innerHTML = `
-                        <p>You unlocked Level 1. Complete it to unlock more levels!</p>
-                    `;
-                    continueBtn.href = "{{ route('stage.level', ['stage' => $stageName, 'level' => 1]) }}";
-                }
-                
-                // Show results
-                resultContainer.style.display = 'block';
-                resultContainer.scrollIntoView({ behavior: 'smooth' });
-            });
-            
-            // Initialize
-            showQuestion(0);
+      <!-- Question 2 -->
+      <div class="question-container" id="question-2">
+        <div class="question-text">2. Which of these is NOT a valid Python data type?</div>
+        <div class="options">
+          <div class="option"><label><input type="radio" name="q2" value="a" required> int</label></div>
+          <div class="option"><label><input type="radio" name="q2" value="b" required> str</label></div>
+          <div class="option"><label><input type="radio" name="q2" value="c" required> char</label></div>
+        </div>
+        <div class="quiz-nav">
+          <button type="button" class="quiz-btn prev-btn">Previous</button>
+          <button type="button" class="quiz-btn next-btn">Next</button>
+        </div>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="question-container" id="question-3">
+        <div class="question-text">3. What is the output of: print(3 + 2 * 2)</div>
+        <div class="options">
+          <div class="option"><label><input type="radio" name="q3" value="a" required> 10</label></div>
+          <div class="option"><label><input type="radio" name="q3" value="b" required> 7</label></div>
+          <div class="option"><label><input type="radio" name="q3" value="c" required> 12</label></div>
+        </div>
+        <div class="quiz-nav">
+          <button type="button" class="quiz-btn prev-btn">Previous</button>
+          <button type="button" class="quiz-btn next-btn">Next</button>
+        </div>
+      </div>
+
+      <!-- Question 4 -->
+      <div class="question-container" id="question-4">
+        <div class="question-text">4. How do you create a variable with the value 5?</div>
+        <div class="options">
+          <div class="option"><label><input type="radio" name="q4" value="a" required> variable = 5</label></div>
+          <div class="option"><label><input type="radio" name="q4" value="b" required> 5 = variable</label></div>
+          <div class="option"><label><input type="radio" name="q4" value="c" required> var variable 5</label></div>
+        </div>
+        <div class="quiz-nav">
+          <button type="button" class="quiz-btn prev-btn">Previous</button>
+          <button type="button" class="quiz-btn next-btn">Next</button>
+        </div>
+      </div>
+
+      <!-- Question 5 -->
+      <div class="question-container" id="question-5">
+        <div class="question-text">5. What does the print() function do?</div>
+        <div class="options">
+          <div class="option"><label><input type="radio" name="q5" value="a" required> Creates a new file</label></div>
+          <div class="option"><label><input type="radio" name="q5" value="b" required> Displays output to the screen</label></div>
+          <div class="option"><label><input type="radio" name="q5" value="c" required> Performs a calculation</label></div>
+        </div>
+        <div class="quiz-nav">
+          <button type="button" class="quiz-btn prev-btn">Previous</button>
+          <button type="button" id="submit-btn">Submit Quiz</button>
+        </div>
+      </div>
+
+      <div class="progress-indicator" id="progress">Question 1 of 5</div>
+    </form>
+
+    <div class="result-container" id="result-container">
+      <h2>Your Results</h2>
+      <div id="score-display" class="score"></div>
+      <div id="unlock-message"></div>
+      <a href="/dashboard" class="quiz-btn" style="margin-top: 1rem;">Continue to Learning</a>
+    </div>
+  </div>
+@endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const questions = document.querySelectorAll('.question-container');
+  const nextButtons = document.querySelectorAll('.next-btn');
+  const prevButtons = document.querySelectorAll('.prev-btn');
+  const submitButton = document.getElementById('submit-btn');
+  const progressIndicator = document.getElementById('progress');
+  const resultContainer = document.getElementById('result-container');
+  const scoreDisplay = document.getElementById('score-display');
+  const unlockMessage = document.getElementById('unlock-message');
+  const continueBtn = document.querySelector('#result-container .quiz-btn');
+
+  let currentQuestion = 0;
+
+  function updateProgress(){
+    progressIndicator.textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+  }
+
+  function showQuestion(index){
+    questions.forEach((q, i) => q.classList.toggle('active', i === index));
+    submitButton.style.display = (index === questions.length - 1) ? 'block' : 'none';
+    updateProgress();
+  }
+
+  nextButtons.forEach(btn => btn.addEventListener('click', () => {
+    if (currentQuestion < questions.length - 1) { currentQuestion++; showQuestion(currentQuestion); }
+  }));  
+  prevButtons.forEach(btn => btn.addEventListener('click', () => {
+    if (currentQuestion > 0) { currentQuestion--; showQuestion(currentQuestion); }
+  }));
+
+  submitButton.addEventListener('click', async function() {
+    const answers = { q1:'b', q2:'c', q3:'b', q4:'a', q5:'b' };
+    let score = 0;
+
+    for (let i = 1; i <= questions.length; i++) {
+      const selected = document.querySelector(`input[name=\"q${i}\"]:checked`);
+      if (selected && selected.value === answers[`q${i}`]) score++;
+    }
+
+    const percentage = (score / questions.length) * 100;
+    scoreDisplay.textContent = `Score: ${score}/${questions.length}`;
+
+    if (score === questions.length) {
+      scoreDisplay.className = 'score perfect-score';
+      unlockMessage.innerHTML = `<p>🎉 Perfect score! All levels unlocked!</p><p>You can start with any level you want.</p>`;
+      continueBtn.href = "{{ route('stage.level', ['stage' => $stageName, 'level' => 1]) }}";
+      try{
+        const resp = await fetch('/stage/{{ $stageName }}/submit-assessment', {
+          method:'POST',
+          headers:{'Content-Type':'application/json','X-CSRF-TOKEN':'{{ csrf_token() }}'},
+          body:JSON.stringify({score:percentage, unlocked_all:true})
         });
-    </script>
-</body>
-</html>
+        if(!resp.ok) throw new Error('Failed to save results');
+      }catch(e){ console.error(e); }
+    } else {
+      scoreDisplay.className = 'score low-score';
+      unlockMessage.innerHTML = `<p>You unlocked Level 1. Complete it to unlock more levels!</p>`;
+      continueBtn.href = "{{ route('stage.level', ['stage' => $stageName, 'level' => 1]) }}";
+    }
+
+    resultContainer.style.display = 'block';
+    resultContainer.scrollIntoView({behavior:'smooth'});
+  });
+
+  showQuestion(0);
+});
+</script>
+@endpush
